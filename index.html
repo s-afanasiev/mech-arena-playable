@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Mech Arena</title>
+</head>
+<body>
+  <div id="stage" aria-label="Battlefield"></div>
+
+  <div id="hud" class="hud" hidden>
+    <div class="hud-row">
+      <div class="armor">
+        <span class="label">ARMOR</span>
+        <div class="bar"><i data-hud="armor"></i></div>
+      </div>
+      <div class="enemies"><b data-hud="enemies">5</b><span class="label">ENEMIES</span></div>
+      <button class="mute" data-hud="mute" aria-pressed="false" aria-label="Sound">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" /><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /><path class="cross" d="M16 9l6 6M22 9l-6 6" /></svg>
+      </button>
+    </div>
+    <div class="timer"><i data-hud="timer"></i></div>
+  </div>
+
+  <div id="tutorial" class="tutorial" hidden>
+    <span class="ring"></span>
+    <svg class="hand" viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M24 8a5 5 0 0 1 10 0v21l3-.8a5 5 0 0 1 6 3l1-.3a5 5 0 0 1 6 3.4l.6-.2a5 5 0 0 1 6.4 4.6V50c0 7-6 12-13 12H32c-5 0-9-2-12-6L8 41a5 5 0 0 1 7-7l9 7z" />
+    </svg>
+    <span class="tip" data-tutorial="text">TAP TO ATTACK</span>
+  </div>
+
+  <button id="strike" class="strike" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c3 2.5 4.5 6 4.5 10v5l-2 2h-5l-2-2v-5C7.5 8 9 4.5 12 2zM9.5 19l-2 3M14.5 19l2 3M12 19v3" /></svg>
+    <span>MISSILE<br />STRIKE</span>
+  </button>
+
+  <button id="cta" class="cta-mini"><b>MECH ARENA</b><span>PLAY NOW</span></button>
+
+  <div id="flash" class="flash"></div>
+
+  <div id="endcard" class="endcard" hidden>
+    <div class="endcard-panel">
+      <div class="logo">MECH<br />ARENA</div>
+      <h1 data-end="title">VICTORY</h1>
+      <p data-end="subtitle"></p>
+      <span class="cta">PLAY FREE</span>
+    </div>
+  </div>
+
+  <div id="debug" class="debug" hidden></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

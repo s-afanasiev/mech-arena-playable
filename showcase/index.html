@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mech Arena — playable ad demo</title>
+  <meta name="description" content="3D playable ad on three.js: single HTML file, ad network adapters, size and FPS budgets." />
+  <link rel="stylesheet" href="showcase.css" />
+</head>
+<body>
+  <main class="layout">
+    <section class="device-col">
+      <div class="device" data-orientation="portrait">
+        <iframe id="playable" title="Mech Arena playable" src="play/preview/index.html" allow="autoplay"></iframe>
+      </div>
+      <div class="controls">
+        <div class="segmented" role="group" aria-label="Orientation">
+          <button data-orientation="portrait" aria-pressed="true">Portrait</button>
+          <button data-orientation="landscape" aria-pressed="false">Landscape</button>
+        </div>
+        <button id="restart">Restart</button>
+        <label class="toggle"><input id="debug" type="checkbox" /> Perf overlay</label>
+      </div>
+      <p id="events" class="events" aria-live="polite">Tap an enemy mech to start.</p>
+    </section>
+
+    <section class="info">
+      <h1>Mech Arena <span>playable ad demo</span></h1>
+      <p class="lead">A 25-second 3D playable built with three.js: tap enemy mechs, charge a missile strike, finish on an end card with a store CTA. Everything — mechs, arena, effects, sound — is generated in code, so each network build is a single self-contained HTML file.</p>
+
+      <h2>Builds</h2>
+      <table>
+        <thead><tr><th>Network</th><th>Single HTML</th><th>gzip</th><th>Budget</th><th></th></tr></thead>
+        <tbody id="builds"><tr><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+      <p class="note">Each build ships exactly one adapter: <code>FbPlayableAd.onCTAClick()</code> for Meta, <code>ExitApi.exit()</code> for Google, <code>mraid.open()</code> with ready/viewable handling for MRAID networks (Unity Ads, AppLovin…). The build fails if a file exceeds the budget or references anything external.</p>
+
+      <h2>Under the hood</h2>
+      <ul>
+        <li><b>Zero allocations in the frame loop.</b> Projectiles and particles live in fixed-size slot pools backed by typed arrays and are drawn with <code>InstancedMesh</code>.</li>
+        <li><b>Few draw calls.</b> Each mech is 3 merged, vertex-coloured meshes; obstacles are one instanced mesh; shadows are blob decals instead of shadow maps.</li>
+        <li><b>No assets.</b> Procedural geometry, canvas-generated textures, WebAudio-synthesised sound effects, system fonts.</li>
+        <li><b>Ad lifecycle.</b> Waits for the network to be ready, pauses rendering and audio when the ad is hidden, unlocks audio on the first tap, adapts to portrait and landscape.</li>
+        <li><b>Named game states.</b> <code>intro → tutorial → battle → strike → won | lost → end</code>; illegal transitions are impossible and covered by tests.</li>
+      </ul>
+
+      <p class="links">
+        <a href="https://github.com/s-afanasiev/mech-arena-playable">Source on GitHub</a>
+        <a href="play/preview/index.html?debug" target="_blank" rel="noopener">Open full screen with perf overlay</a>
+      </p>
+    </section>
+  </main>
+  <script src="showcase.js"></script>
+</body>
+</html>

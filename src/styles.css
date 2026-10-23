@@ -1,0 +1,223 @@
+:root {
+  --accent: #ff8a1f;
+  --accent-2: #ffb347;
+  --teal: #3ff2e6;
+  --danger: #ff4d4d;
+  --ink: #0f1318;
+  --panel: rgb(15 19 24 / 0.72);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; } /* иначе display: grid у элемента перебивает атрибут hidden */
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(#1f2c45 0%, #7a5a6e 38%, #d4926a 60%, #e9b07a 100%);
+  color: #fff;
+  font-family: var(--font);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+button { font: inherit; color: inherit; border: 0; padding: 0; background: none; cursor: pointer; }
+
+#stage { position: fixed; inset: 0; }
+#stage canvas { display: block; }
+
+.label { font-size: 10px; font-weight: 800; letter-spacing: 0.12em; opacity: 0.85; }
+
+/* ---------- HUD ---------- */
+.hud {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: calc(10px + env(safe-area-inset-top)) 12px 0;
+  pointer-events: none;
+}
+.hud-row { display: flex; align-items: center; gap: 10px; }
+.armor { flex: 1; display: grid; gap: 3px; max-width: 46%; }
+.bar { height: 12px; border-radius: 6px; background: var(--panel); overflow: hidden; border: 1px solid rgb(255 255 255 / 0.25); }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, #36d27a, #8cf0a8); transform-origin: left; transition: transform 0.2s; }
+.bar i.is-low { background: linear-gradient(90deg, var(--danger), #ff8a7a); }
+.enemies {
+  display: grid;
+  justify-items: center;
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: 10px;
+  background: var(--panel);
+}
+.enemies b { font-size: 22px; line-height: 1; color: var(--accent-2); }
+.mute { pointer-events: auto; width: 38px; height: 38px; border-radius: 50%; background: var(--panel); display: grid; place-items: center; }
+.mute svg { width: 22px; height: 22px; fill: #fff; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; }
+.mute .wave { fill: none; }
+.mute .cross { display: none; }
+.mute[aria-pressed="true"] .wave { display: none; }
+.mute[aria-pressed="true"] .cross { display: block; }
+.timer { margin-top: 8px; height: 4px; border-radius: 2px; background: rgb(255 255 255 / 0.2); overflow: hidden; }
+.timer i { display: block; height: 100%; background: var(--accent); transform-origin: left; }
+
+/* ---------- Обучение ---------- */
+.tutorial { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 5; }
+.tutorial .ring {
+  position: absolute;
+  left: -34px;
+  top: -34px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-2);
+  animation: ring 1s ease-out infinite;
+}
+.tutorial .hand {
+  position: absolute;
+  left: -6px;
+  top: 6px;
+  width: 64px;
+  height: 64px;
+  fill: #fff;
+  stroke: var(--ink);
+  stroke-width: 3;
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.4));
+  animation: press 1s ease-in-out infinite;
+}
+.tutorial .tip {
+  position: absolute;
+  left: 50%;
+  top: -86px;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--panel);
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.4);
+}
+@keyframes ring { from { transform: scale(0.5); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+@keyframes press { 0%, 100% { transform: translate(10px, 10px); } 50% { transform: translate(0, 0) scale(0.92); } }
+
+/* ---------- Ракетный удар ---------- */
+.strike {
+  position: fixed;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: 118px;
+  height: 118px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  background: radial-gradient(circle at 50% 35%, #ffb347, #ff5e1a 70%);
+  border: 4px solid #fff3d6;
+  font-weight: 900;
+  font-size: 13px;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 0.35);
+  box-shadow: 0 0 0 0 rgb(255 138 31 / 0.7), 0 10px 24px rgb(0 0 0 / 0.35);
+  animation: pulse 1s ease-in-out infinite;
+  z-index: 6;
+}
+.strike svg { width: 30px; height: 30px; fill: #fff; stroke: #fff; stroke-width: 1.4; stroke-linecap: round; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgb(255 138 31 / 0.7), 0 10px 24px rgb(0 0 0 / 0.35); transform: translateX(-50%) scale(1); }
+  70% { box-shadow: 0 0 0 26px rgb(255 138 31 / 0), 0 10px 24px rgb(0 0 0 / 0.35); transform: translateX(-50%) scale(1.06); }
+  100% { box-shadow: 0 0 0 0 rgb(255 138 31 / 0), 0 10px 24px rgb(0 0 0 / 0.35); transform: translateX(-50%) scale(1); }
+}
+
+/* ---------- Постоянная кнопка стора ---------- */
+.cta-mini {
+  position: fixed;
+  left: 50%;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 8px 16px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  white-space: nowrap; /* left: 50% урезает ширину вдвое — без этого плашка ломается на две строки */
+  z-index: 4;
+}
+.cta-mini b { font-weight: 900; letter-spacing: 0.08em; font-size: 13px; }
+.cta-mini span { padding: 8px 14px; border-radius: 999px; background: var(--accent); font-weight: 900; font-size: 13px; letter-spacing: 0.05em; }
+
+/* ---------- Вспышки ---------- */
+.flash { position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 3; }
+.flash[data-kind="hit"] { background: radial-gradient(transparent 45%, rgb(255 40 40 / 0.55)); }
+.flash[data-kind="boom"] { background: rgb(255 240 210 / 0.55); }
+.flash.is-on { animation: flash 0.35s ease-out; }
+@keyframes flash { from { opacity: 1; } to { opacity: 0; } }
+
+/* ---------- Финальная карточка ---------- */
+.endcard {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at 50% 40%, rgb(30 40 55 / 0.55), rgb(8 10 14 / 0.9));
+  z-index: 10;
+  cursor: pointer;
+  animation: fade-in 0.4s ease-out;
+}
+.endcard-panel { display: grid; justify-items: center; gap: 14px; text-align: center; max-width: 340px; }
+.endcard .logo {
+  font-weight: 900;
+  font-size: 44px;
+  line-height: 0.9;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-shadow: 0 4px 0 var(--accent), 0 8px 24px rgb(0 0 0 / 0.5);
+}
+.endcard h1 { margin: 6px 0 0; font-size: 34px; font-weight: 900; letter-spacing: 0.08em; color: var(--accent-2); }
+.endcard[data-result="lost"] h1 { color: var(--danger); }
+.endcard p { margin: 0; font-size: 16px; opacity: 0.9; }
+.endcard .cta {
+  margin-top: 10px;
+  padding: 18px 46px;
+  border-radius: 999px;
+  background: linear-gradient(#ffb347, #ff6a1a);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  box-shadow: 0 6px 0 #b4440e, 0 14px 30px rgb(0 0 0 / 0.45);
+  animation: bounce 1.2s ease-in-out infinite;
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+
+/* ---------- Отладка (?debug) ---------- */
+.debug {
+  position: fixed;
+  left: 8px;
+  top: calc(84px + env(safe-area-inset-top));
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 0.65);
+  font: 11px/1.45 ui-monospace, Menlo, Consolas, monospace;
+  pointer-events: none;
+  z-index: 20;
+}
+.debug .over { color: #ff6b6b; }
+
+/* Альбомная ориентация: кнопки ниже и компактнее */
+@media (orientation: landscape) {
+  .strike { width: 96px; height: 96px; bottom: calc(70px + env(safe-area-inset-bottom)); left: auto; right: 24px; transform: none; animation-name: pulse-side; }
+  .armor { max-width: 30%; }
+  @keyframes pulse-side { 0%, 100% { transform: scale(1); } 70% { transform: scale(1.06); } }
+}
